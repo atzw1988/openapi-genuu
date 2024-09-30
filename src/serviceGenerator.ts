@@ -299,19 +299,12 @@ class ServiceGenerator {
         if (!operationObject) {
           return;
         }
-
-        // const tags = pathItem['x-swagger-router-controller']
-        //   ? [pathItem['x-swagger-router-controller']]
-        //   : operationObject.tags || [operationObject.operationId] || [
-        //       p.replace('/', '').split('/')[1],
-        //     ];
-
+        const parg = p.replace('/', '').split('/');
         const tags = operationObject['x-swagger-router-controller']
           ? [operationObject['x-swagger-router-controller']]
-          : operationObject.tags || [operationObject.operationId] || [
-            p.replace('/', '').split('/')[1],
-          ];
-
+          : (operationObject.tags?.length ? operationObject.tags
+            : operationObject.operationId ? [operationObject.operationId]
+              : [parg[0]])
         tags.forEach((tagString) => {
           const tag = resolveTypeName(tagString);
 
